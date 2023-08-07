@@ -10,7 +10,12 @@ namespace OnionArchitectureApp.Persistence.Context
 {
 	public class ApplicationDbContext : DbContext
 	{
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
+        {
+            
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Product>().HasData(
 				new Product() { Id = Guid.NewGuid(), Name = "Pen", Quantity = 100, Value = 50 },

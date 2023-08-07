@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnionArchitectureApp.Application.Dto;
+using OnionArchitectureApp.Application.Features.Commands.CreateProduct;
 using OnionArchitectureApp.Application.Features.Queries.GetAllProduct;
+using OnionArchitectureApp.Application.Features.Queries.GetProductById;
 using OnionArchitectureApp.Application.İnterfaces.Repository;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,14 +28,19 @@ namespace OnionArchitectureApp.WebAPI.Controllers
 		{
 			var query=new GetAllProductQuery();
 			return Ok(await _mediator.Send(query));
-			var result = await _productRepository.GetAllAsync();
-			result.Select(x => new ProductDto()
-			{
-				Id = x.Id,
-				Name = x.Name
-			}).ToList();
+		}
 
-			return Ok(result);
+        [HttpPost]
+		public async Task<IActionResult> Post(CreateProductCommand createProductCommand) 
+		{
+			return Ok(await _mediator.Send(createProductCommand));
+		}
+
+        [HttpGet("{id}")]
+		public async Task<IActionResult> GetProductById(Guid id) 
+		{
+			var query=new GetProductByIdQuery() { Id=id};
+			return Ok(await _mediator.Send(query));
 		}
 	}
 }
